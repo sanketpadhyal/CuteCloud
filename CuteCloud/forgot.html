@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Forgot Password – CuteCloud</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f1f4fb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .auth-container {
+      display: flex;
+      width: 90%;
+      max-width: 1000px;
+      height: 600px;
+      background: white;
+      border-radius: 30px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      transition: 0.3s ease;
+    }
+    .blurred {
+      filter: blur(3px);
+    }
+    .auth-left {
+      flex: 1;
+      background-color: #e7d8ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+    .auth-left img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 20px;
+      object-fit: cover;
+    }
+    .auth-right {
+      flex: 1;
+      padding: 60px 40px;
+      background: linear-gradient(to bottom right, #fdfdfd, #eef2f9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .form-card {
+      width: 100%;
+      max-width: 350px;
+      text-align: center;
+    }
+    .form-header h2 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #1d1d1d;
+    }
+    .form-header p {
+      color: #7a7a7a;
+      margin-bottom: 30px;
+    }
+    form input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: #ff5e5e;
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .error-msg {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    .form-footer {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    .form-footer a {
+      color: #7d44ff;
+      text-decoration: none;
+    }
+
+    /* === Loader Overlay === */
+    .loader-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .loader {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #7d44ff;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  
+  @media (max-width: 768px) {
+  body {
+    height: auto;
+    padding: 15px;
+    overflow-y: auto;
+  }
+
+  .auth-container {
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+    max-width: 420px;
+    margin: auto;
+    border-radius: 20px;
+  }
+
+  .auth-left {
+    order: 2;
+    padding: 20px;
+  }
+
+  .auth-left img {
+    max-width: 220px;
+    height: auto;
+  }
+
+  .auth-right {
+    order: 1;
+    padding: 30px 20px;
+  }
+
+  .form-card {
+    max-width: 100%;
+  }
+
+  .form-header h2 {
+    font-size: 22px;
+  }
+
+  button {
+    font-size: 15px;
+  }
+}
+
+  </style>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC3C-GOTU2zWXb-Qtqdzw6azttEvic_ppw",
+      authDomain: "cutecloud-63a8c.firebaseapp.com",
+      projectId: "cutecloud-63a8c",
+      storageBucket: "cutecloud-63a8c.appspot.com",
+      messagingSenderId: "713219781086",
+      appId: "1:713219781086:web:4b1db08b992a9f3daa6d4f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("forgotForm");
+      const emailInput = document.getElementById("resetEmail");
+      const errorMsg = document.getElementById("errorMsg");
+      const loaderOverlay = document.querySelector(".loader-overlay");
+      const container = document.querySelector(".auth-container");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        errorMsg.textContent = "";
+
+        loaderOverlay.style.display = "flex";
+        container.classList.add("blurred");
+
+        try {
+          await sendPasswordResetEmail(auth, emailInput.value.trim());
+          setTimeout(() => {
+            window.location.href = "reset.html";
+          }, 2000); // wait 2s for smooth UX
+        } catch (err) {
+          loaderOverlay.style.display = "none";
+          container.classList.remove("blurred");
+          errorMsg.textContent = "Error: " + err.message;
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="loader-overlay"><div class="loader"></div></div>
+
+  <div class="auth-container">
+    <div class="auth-left">
+      <img src="assets/3.png" alt="Forgot Password">
+    </div>
+    <div class="auth-right">
+      <div class="form-card">
+        <div class="form-header">
+          <h2>Forgot Password?</h2>
+          <p>Enter your email. We'll send a reset link.</p>
+        </div>
+        <form id="forgotForm">
+          <input type="email" id="resetEmail" placeholder="Enter your email" required />
+          <button type="submit">Send Reset Link</button>
+          <p class="error-msg" id="errorMsg"></p>
+        </form>
+        <div class="form-footer">
+          <a href="index.html">← Back to Login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+  body.loaded .auth-container {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .auth-container {
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.8s ease;
+  }
+</style>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    document.body.classList.add("loaded");
+  });
+</script>
+
+  <script>
+  // Handles "← Back to Login" links globally
+  document.addEventListener("DOMContentLoaded", () => {
+    const backLinks = document.querySelectorAll('a[href*="login"], a[href*="index"]');
+    backLinks.forEach(link => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "index.html";
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

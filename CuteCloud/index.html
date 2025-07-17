@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – CuteCloud</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="module" src="js/auth.js" defer></script>
+  <script src="https://kit.fontawesome.com/8ea8c3b8e4.js" crossorigin="anonymous"></script>
+
+  <style>
+    body.loaded .auth-container {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .auth-container {
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.8s ease;
+    }
+
+    .loader-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .loader {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #7d44ff;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .glass-branding {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 12px 20px;
+      border-radius: 18px;
+      margin-bottom: 25px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 12px #00b0ff55;
+    }
+
+    .glass-branding .blue-glow {
+      color: #00b0ff;
+      font-weight: 700;
+      font-size: 20px;
+      text-shadow: 0 0 10px #00b0ff;
+    }
+
+    .glass-branding .red-plain {
+      color: #ff4d4d;
+      font-weight: 700;
+      font-size: 20px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      padding: 14px 45px 14px 14px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .input-wrapper input:focus,
+    .input-wrapper input.active {
+      border-color: #7d44ff;
+      box-shadow: 0 0 10px rgba(125, 68, 255, 0.4);
+    }
+
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 14px;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #999;
+      cursor: pointer;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .toggle-password:hover {
+      color: #7d44ff;
+      transform: translateY(-50%) scale(1.15);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: #7d44ff;
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .form-footer {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .form-footer a {
+      color: #7d44ff;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .error-msg {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+  <!-- ⬇ Place this in your <style> block or style.css -->
+<style>
+  @media (max-width: 768px) {
+    body {
+      padding: 10px;
+      height: auto;
+    }
+
+    .auth-container {
+      flex-direction: column;
+      height: auto;
+      border-radius: 20px;
+      width: 95%;
+      max-width: 420px;
+    }
+
+    .auth-left {
+      padding: 20px;
+      height: auto;
+    }
+
+    .auth-left img {
+      max-width: 220px;
+      margin: 0 auto;
+    }
+
+    .auth-right {
+      padding: 30px 20px;
+    }
+
+    .form-card {
+      max-width: 100%;
+    }
+
+    .form-header h2 {
+      font-size: 22px;
+    }
+
+    .glass-branding {
+      flex-wrap: wrap;
+      text-align: center;
+    }
+  }
+</style>
+
+</head>
+
+<body>
+  <div class="loader-overlay" id="loaderOverlay">
+    <div class="loader"></div>
+  </div>
+
+  <div class="auth-container">
+    <div class="auth-left">
+      <img src="assets/1.png" alt="Login Illustration">
+    </div>
+    <div class="auth-right">
+      <div class="form-card">
+
+        <!-- NEW Glass Panel Branding -->
+        <div class="glass-branding">
+          <span class="blue-glow">Cute</span><span class="red-plain">Cloud ☁️</span>
+        </div>
+
+        <div class="form-header">
+          <h2>Hello Again! 👋</h2>
+          <p>Welcome back! You've been missed</p>
+        </div>
+
+        <form id="authForm">
+          <div class="input-wrapper">
+            <input type="email" id="email" placeholder="Enter email" required />
+          </div>
+
+          <div class="input-wrapper">
+            <input type="password" id="password" placeholder="Password" required />
+            <i class="fa-regular fa-eye toggle-password" id="togglePassword"></i>
+          </div>
+
+          <button type="submit">Login</button>
+          <p class="error-msg" id="errorMsg"></p>
+        </form>
+
+        <div class="form-footer">
+          <a href="#" id="forgotLink">Forgot Password?</a>
+        </div>
+
+        <div class="form-footer" style="margin-top: 10px;">
+          <span>New to CuteCloud? </span>
+          <a href="#" id="registerNow">Register Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      document.body.classList.add("loaded");
+
+      const loader = document.getElementById("loaderOverlay");
+      const forgotLink = document.getElementById("forgotLink");
+      const registerNow = document.getElementById("registerNow");
+      const container = document.querySelector(".auth-container");
+
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      const errorMsg = document.getElementById("errorMsg");
+      const form = document.getElementById("authForm");
+      const togglePassword = document.getElementById("togglePassword");
+
+      forgotLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        loader.style.display = "flex";
+        container.classList.add("blurred");
+        setTimeout(() => {
+          window.location.href = "forgot.html";
+        }, 1500);
+      });
+
+      registerNow.addEventListener("click", (e) => {
+        e.preventDefault();
+        loader.style.display = "flex";
+        container.classList.add("blurred");
+        setTimeout(() => {
+          window.location.href = "register.html";
+        }, 1500);
+      });
+
+      togglePassword.addEventListener("click", () => {
+        const type = passwordInput.type === "password" ? "text" : "password";
+        passwordInput.type = type;
+        togglePassword.classList.toggle("fa-eye");
+        togglePassword.classList.toggle("fa-eye-slash");
+      });
+
+      [emailInput, passwordInput].forEach((input) => {
+        input.addEventListener("input", () => {
+          input.classList.toggle("active", input.value.trim() !== "");
+        });
+        input.addEventListener("blur", () => {
+          input.classList.toggle("active", input.value.trim() !== "");
+        });
+      });
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        loader.style.display = "flex";
+        container.classList.add("blurred");
+
+        try {
+          const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js");
+          const { getAuth, signInWithEmailAndPassword } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js");
+
+          const app = initializeApp({
+            apiKey: "AIzaSyC3C-GOTU2zWXb-Qtqdzw6azttEvic_ppw",
+            authDomain: "cutecloud-63a8c.firebaseapp.com",
+            projectId: "cutecloud-63a8c",
+            storageBucket: "cutecloud-63a8c.appspot.com",
+            messagingSenderId: "713219781086",
+            appId: "1:713219781086:web:4b1db08b992a9f3daa6d4f"
+          });
+
+          const auth = getAuth(app);
+          await signInWithEmailAndPassword(auth, emailInput.value.trim(), passwordInput.value.trim());
+
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 1500);
+        } catch (err) {
+          loader.style.display = "none";
+          container.classList.remove("blurred");
+
+          if (err.message.includes("wrong-password")) {
+            errorMsg.textContent = "❌ Wrong password!";
+          } else if (err.message.includes("user-not-found")) {
+            errorMsg.textContent = "❌ User not found!";
+          } else {
+            errorMsg.textContent = "❌ " + err.message;
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

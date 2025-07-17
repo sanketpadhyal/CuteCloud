@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard – Cute Cloud ☁︎</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url('assets/dashboard4.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      min-height: 100vh;
+      transition: 0.4s ease;
+    }
+
+    body.light {
+      background: #f3f3f3;
+      color: #111;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px 40px;
+      flex-wrap: wrap;
+    }
+
+    .top-bar-left {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .profile-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px 18px;
+      border-radius: 14px;
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .profile-box:hover {
+      transform: scale(1.05);
+    }
+
+    .branding {
+      font-size: 32px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .blue-glow {
+      color: #00b0ff;
+      text-shadow: 0 0 12px #00b0ff99;
+    }
+
+    .red-plain {
+      color: #ff5e5e;
+    }
+
+    .glass-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      padding: 40px;
+    }
+
+    .glass-plate {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 20px;
+      height: 230px;
+      backdrop-filter: blur(15px);
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .glass-plate:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(125, 68, 255, 0.5);
+    }
+
+    .glass-plate h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .glass-plate p {
+      font-size: 14px;
+      font-style: italic;
+      margin: 5px 0;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .profile-panel {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 20px;
+      width: 320px;
+      text-align: center;
+      color: #fff;
+      position: relative;
+    }
+
+    .profile-panel input {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    .profile-panel button {
+      background: #7d44ff;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      margin-top: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 20px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .credit-panel {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.15);
+      padding: 14px 25px;
+      border-radius: 12px;
+      font-size: 14px;
+      color: #fff;
+      backdrop-filter: blur(10px);
+      animation: fadeOut 3s forwards;
+      z-index: 999;
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 0; transform: translate(-50%, 30px); }
+      10% { opacity: 1; transform: translate(-50%, 0); }
+      90% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%, -10px); }
+    }
+
+    #logoutScreen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      color: white;
+      font-size: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .glass-grid {
+        grid-template-columns: 1fr;
+        padding: 20px;
+      }
+
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .branding {
+        margin-top: 15px;
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+<body class="dark">
+  <div class="dashboard-header">
+    <div class="top-bar-left">
+      <div class="profile-box" onclick="toggleProfilePanel()">👤 Profile</div>
+      <div class="profile-box" onclick="toggleMode()">🌓 Mode</div>
+      <div class="profile-box" onclick="logoutUser()">🚪 Log Out</div>
+      <div class="profile-box" onclick="showCredit()">💡 Credit</div>
+    </div>
+    <div class="branding">
+      <span class="blue-glow">Cute</span><span class="red-plain"> Cloud ☁︎</span>
+    </div>
+  </div>
+
+  <div id="logoutScreen">Logging out...</div>
+
+  <div class="glass-grid">
+    <div class="glass-plate" onclick="location.href='photo.html'">
+      <h2>📸 Photos</h2>
+      <p>Upload photos securely</p>
+      <p>Organize by folder</p>
+      <p>Preview before upload</p>
+      <p>Supports JPEG/PNG</p>
+    </div>
+    <div class="glass-plate" onclick="location.href='note.html'">
+      <h2>📝 Notes</h2>
+      <p>Auto-saved in cloud</p>
+      <p>Write & manage ideas</p>
+      <p>Rich text supported</p>
+      <p>Tag your notes</p>
+    </div>
+
+        <div class="glass-plate" onclick="location.href='video.html'">
+      <h2>🎥 Videos</h2>
+      <p>Upload & watch</p>
+      <p>Supports MP4/MKV</p>
+      <p>Secure streaming</p>
+      <p>Fast cloud CDN</p>
+    </div>
+    <div class="glass-plate" onclick="location.href='folder.html'">
+      <h2>📁 Folders</h2>
+      <p>Organize files</p>
+      <p>Create new folders</p>
+      <p>Rename/edit folders</p>
+      <p>Auto cloud sync</p>
+    </div>
+  </div>
+
+  <!-- Profile Overlay -->
+  <div class="overlay" id="profileOverlay">
+    <div class="profile-panel">
+      <span class="close-btn" onclick="toggleProfilePanel()">&times;</span>
+      <p id="displayName">Name: Loading...</p>
+      <p id="displayEmail">Email: Loading...</p>
+      <input type="text" id="nameInput" placeholder="Change Name" />
+      <button onclick="saveProfile()">Change Name</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import {
+      getDatabase,
+      ref,
+      set,
+      get,
+      child
+    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC3C-GOTU2zWXb-Qtqdzw6azttEvic_ppw",
+      authDomain: "cutecloud-63a8c.firebaseapp.com",
+      databaseURL: "https://cutecloud-63a8c-default-rtdb.firebaseio.com",
+      projectId: "cutecloud-63a8c",
+      storageBucket: "cutecloud-63a8c.appspot.com",
+      messagingSenderId: "713219781086",
+      appId: "1:713219781086:web:4b1db08b992a9f3daa6d4f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    const overlay = document.getElementById("profileOverlay");
+    const nameInput = document.getElementById("nameInput");
+    const displayName = document.getElementById("displayName");
+    const displayEmail = document.getElementById("displayEmail");
+
+    window.toggleProfilePanel = () => {
+      overlay.style.display = overlay.style.display === "flex" ? "none" : "flex";
+    };
+
+    window.toggleMode = () => {
+      document.body.classList.toggle("light");
+    };
+
+    window.logoutUser = async () => {
+      document.getElementById("logoutScreen").style.display = "flex";
+      await new Promise((res) => setTimeout(res, 2000));
+      await signOut(auth);
+      window.location.href = "index.html";
+    };
+
+    window.showCredit = () => {
+      const credit = document.createElement("div");
+      credit.className = "credit-panel";
+      credit.innerHTML = "👑 Made by <b>SANKET PADHYAL ~ VortexByte</b> • Github = @sanketpadhyal";
+      document.body.appendChild(credit);
+      setTimeout(() => credit.remove(), 3500);
+    };
+
+    window.saveProfile = async () => {
+      const user = auth.currentUser;
+      if (!user) return alert("Login required.");
+      const name = nameInput.value.trim();
+      if (!name) return alert("Enter valid name.");
+
+      await set(ref(db, 'users/' + user.uid), {
+        name,
+        email: user.email
+      });
+
+      displayName.textContent = "Name: " + name;
+      alert("Name updated!");
+      overlay.style.display = "none";
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      displayEmail.textContent = "Email: " + user.email;
+
+      const snap = await get(child(ref(db), 'users/' + user.uid));
+      if (snap.exists()) {
+        const data = snap.val();
+        displayName.textContent = "Name: " + (data.name || "User");
+      } else {
+        await set(ref(db, 'users/' + user.uid), {
+          name: "New User",
+          email: user.email
+        });
+        displayName.textContent = "Name: New User";
+      }
+    });
+  </script>
+</body>
+</html>
