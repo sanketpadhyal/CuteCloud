@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – CuteCloud</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="module" src="js/auth.js" defer></script>
+  <script src="https://kit.fontawesome.com/8ea8c3b8e4.js" crossorigin="anonymous"></script>
+  <link rel="icon" type="image/png" href="assets/cloud.png"/>
+
+  <style>
+    /* Alert Box inside Panel */
+    .temp-alert {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      margin: 0; 
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transform: translateY(-6px);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .temp-alert.show {
+      margin: 6px 0;
+      max-height: 100px;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Different alert styles */
+    .alert-error {
+      background: #ffe5e5;
+      color: #b30000;
+      border-left: 4px solid #e60000;
+    }
+    .alert-warning {
+      background: #fff7e6;
+      color: #b37400;
+      border-left: 4px solid #ff9900;
+    }
+    .alert-success {
+      background: #e6ffed;
+      color: #006622;
+      border-left: 4px solid #00b33c;
+    }
+
+    /* Inputs */
+    .input-wrapper {
+      margin-bottom: 6px !important;
+    }
+
+    /* Button positioning */
+    #authForm button {
+      margin-top: 12px; 
+      transition: margin-top 0.3s ease;
+    }
+    #authForm.alert-active button {
+      margin-top: 22px; 
+    }
+  </style>
+</head>
+
+<body>  
+  <div class="loader-overlay" id="loaderOverlay">
+    <div class="loader"></div>
+  </div>
+
+  <div class="auth-container">
+    <div class="auth-left">
+      <img src="assets/1.png" alt="Login Illustration">
+    </div>
+    <div class="auth-right">
+      <div class="form-card">
+
+        
+        <div class="glass-branding">
+          <span class="blue-glow">Cute</span><span class="red-plain">Cloud</span> <img src="assets/cloud.png" alt="cloud" style="width:1.5em; vertical-align:middle;">
+        </div>
+
+        <div class="form-header">
+          <h2>Hello Again! <img src="assets/wave.png" alt="wave" style="width:1.5em; vertical-align:middle;"></h2>
+          <p>Welcome back! You've been missed</p>
+        </div>
+
+        <form id="authForm">
+          <div class="input-wrapper">
+            <input type="email" id="email" placeholder="Enter email" required />
+          </div>
+
+          <div class="input-wrapper">
+            <input type="password" id="password" placeholder="Password" required />
+            <i class="fa-regular fa-eye toggle-password" id="togglePassword"></i>
+          </div><hr>
+
+          <!-- Alert Box inside form -->
+          <div id="alertBox" class="temp-alert"></div>
+
+          <button type="submit">Login</button>
+        </form>
+
+        <div class="form-footer">
+          <a href="#" id="forgotLink">Forgot Password?</a>
+        </div>
+
+        <div class="form-footer" style="margin-top: 8px;">
+          <span>New to CuteCloud? </span>
+          <a href="#" id="registerNow">Register Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔐 Login Handler with Firebase Auth | Made by Sanket Padhyal (@sanketpadhyal) -->
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    document.body.classList.add("loaded");
+
+    const loader = document.getElementById("loaderOverlay");
+    const forgotLink = document.getElementById("forgotLink");
+    const registerNow = document.getElementById("registerNow");
+    const container = document.querySelector(".auth-container");
+
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const form = document.getElementById("authForm");
+    const togglePassword = document.getElementById("togglePassword");
+    const alertBox = document.getElementById("alertBox");
+
+    function showAlert(message, type = "error") {
+      alertBox.textContent = message;
+      alertBox.className = `temp-alert alert-${type} show`;
+      form.classList.add("alert-active");
+
+      setTimeout(() => {
+        alertBox.classList.remove("show");
+        form.classList.remove("alert-active");
+      }, 4000);
+    }
+
+    forgotLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      loader.style.display = "flex";
+      container.classList.add("blurred");
+      setTimeout(() => {
+        window.location.href = "forgot.html";
+      }, 1500);
+    });
+
+    registerNow.addEventListener("click", (e) => {
+      e.preventDefault();
+      loader.style.display = "flex";
+      container.classList.add("blurred");
+      setTimeout(() => {
+        window.location.href = "register.html";
+      }, 1500);
+    });
+
+    togglePassword.addEventListener("click", () => {
+      const type = passwordInput.type === "password" ? "text" : "password";
+      passwordInput.type = type;
+      togglePassword.classList.toggle("fa-eye");
+      togglePassword.classList.toggle("fa-eye-slash");
+    });
+
+    [emailInput, passwordInput].forEach((input) => {
+      input.addEventListener("input", () => {
+        input.classList.toggle("active", input.value.trim() !== "");
+      });
+      input.addEventListener("blur", () => {
+        input.classList.toggle("active", input.value.trim() !== "");
+      });
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      loader.style.display = "flex";
+      container.classList.add("blurred");
+
+      try {
+        const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js");
+        const { getAuth, signInWithEmailAndPassword } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js");
+
+        // 🔧 Replace with your own Firebase config before deploying
+        const app = initializeApp({
+          apiKey: "YOUR_API_KEY",
+          authDomain: "YOUR_AUTH_DOMAIN",
+          projectId: "YOUR_PROJECT_ID",
+          storageBucket: "YOUR_STORAGE_BUCKET",
+          messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+          appId: "YOUR_APP_ID"
+        });
+
+        const auth = getAuth(app);
+        const userCred = await signInWithEmailAndPassword(auth, emailInput.value.trim(), passwordInput.value.trim());
+        const user = userCred.user;
+
+        if (!user.emailVerified) {
+          loader.style.display = "none";
+          container.classList.remove("blurred");
+          showAlert("⚠️ Please verify your email before logging in.", "warning");
+          return;
+        }
+
+        showAlert("✅ Login successful! Redirecting...", "success");
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 1500);
+
+      } catch (err) {
+        loader.style.display = "none";
+        container.classList.remove("blurred");
+
+        if (err.code === "auth/wrong-password" || err.code === "auth/invalid-credential") {
+          showAlert("❌ Wrong password!", "error");
+        } else if (err.code === "auth/user-not-found") {
+          showAlert("❌ Account does not exist!", "error");
+        } else if (err.code === "auth/user-disabled") {
+          showAlert("❌ This account has been disabled!", "error");
+        } else {
+          showAlert("❌ " + err.message, "error");
+        }
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

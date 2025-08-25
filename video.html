@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Video Manager – CuteCloud</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url("assets/dashboard4.jpg") no-repeat center center fixed;
+      background-size: cover;
+      overflow-x: hidden;
+      color: white;
+      animation: slideUp 0.8s ease-out;
+    }
+
+    @keyframes slideUp {
+      0% { transform: translateY(50px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    header {
+      padding: 20px;
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+      text-shadow: 0 0 12px #000;
+    }
+
+    .panel-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      margin-top: 50px;
+    }
+
+    .panel {
+      width: 90%;
+      max-width: 700px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 0 20px #0004;
+      transition: 0.4s ease;
+    }
+
+    .panel:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px #ffffff88;
+      background: rgba(255,255,255,0.15);
+    }
+
+    .panel h2 {
+      margin-bottom: 15px;
+      font-size: 24px;
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .popup {
+      position: relative;
+      background: #ffffffdd;
+      padding: 30px 30px 40px;
+      border-radius: 16px;
+      max-width: 95%;
+      max-height: 80%;
+      overflow-y: auto;
+      text-align: center;
+      color: #000;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .popup .close-icon {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      font-size: 22px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #000;
+      transition: transform 0.2s ease;
+    }
+
+    .popup .close-icon:hover {
+      transform: scale(1.2);
+      color: #ff4d4d;
+    }
+
+    .go-back-btn {
+      margin: 60px auto 40px;
+      display: block;
+      padding: 14px 26px;
+      border-radius: 12px;
+      border: none;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .go-back-btn:hover {
+      background: rgba(255,255,255,0.3);
+      box-shadow: 0 0 12px #fff6;
+    }
+  </style>
+</head>
+<body>
+  <header><img src="assets/movie_camera.png" style="width:1.5em; vertical-align:middle; margin-top: -01%;"> CuteCloud – Video Manager</header>
+
+  <div class="panel-container">
+    <div class="panel" id="uploadPanel">
+      <h2>Upload Video <img src="assets/vhs.png" style="width:1.5em; vertical-align:middle; margin-top: -01%;"></h2>
+      <p>Tap to upload a new video. It'll be saved to your Gmail account securely.</p>
+    </div>
+
+    <div class="panel" id="viewPanel">
+      <h2>View Saved Videos <img src="assets/film_projector.png" style="width:1.5em; vertical-align:middle; margin-top: -02%;"></h2>
+      <p>Access all videos you’ve saved on cloud with your Gmail.</p>
+    </div>
+  </div>
+
+  <button class="go-back-btn" onclick="location.href='dashboard.html'">🔙 Go Back to Dashboard</button>
+
+  <div class="popup-overlay" id="popup">
+    <div class="popup" id="popupContent"></div>
+  </div>
+
+ <!-- 🎬 Video Access Handler | Made by Sanket Padhyal (@sanketpadhyal) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+  // 🔐 Replace with your own Firebase config before deploying
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const popup = document.getElementById('popup');
+  const popupContent = document.getElementById('popupContent');
+
+  const showPopup = (html) => {
+    popupContent.innerHTML = `<div class="close-icon" onclick="location.href='video.html'">❌</div>${html}`;
+    popup.style.display = 'flex';
+  };
+
+  const errorHTML = `
+    <h2>🎬 Feature Unavailable</h2>
+    <p>Currently, video uploads and viewing are disabled due to Firebase limitations.</p>
+    <p>We're working on it! Stay tuned 🎥</p>
+  `;
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      alert("You must be logged in to access this page.");
+      location.href = "index.html";
+      return;
+    }
+
+    document.getElementById("uploadPanel").addEventListener("click", () => showPopup(errorHTML));
+    document.getElementById("viewPanel").addEventListener("click", () => showPopup(errorHTML));
+  });
+
+  document.getElementById("popup").addEventListener("click", (e) => {
+    if (e.target === popup) location.href = "video.html";
+  });
+</script>
+
+</body>
+</html>

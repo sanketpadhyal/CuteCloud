@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <title>Suggestion – Cute Cloud ☁︎</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="icon" type="image/png" href="assets/cloud.png"/>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url('assets/dashboard4.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+    .dashboard-header { display: flex; justify-content: center; align-items: center; padding: 20px; }
+    .branding { font-size: clamp(22px, 4vw, 34px); font-weight: bold; display: flex; align-items: center; gap: 8px; text-align: center; }
+    .blue-glow { color: #00b0ff; text-shadow: 0 0 12px #00b0ff99; }
+    .red-plain { color: #ff5e5e; }
+    .main-container { padding: 20px; display: flex; flex-direction: column; gap: 25px; align-items: center; }
+    .glass-plate {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: clamp(16px, 3vw, 28px);
+      backdrop-filter: blur(12px);
+      width: 100%;
+      max-width: 700px;
+      text-align: center;
+      box-sizing: border-box;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      opacity: 0;
+      transform: translateY(40px);
+      animation: slideUp 0.7s ease forwards;
+    }
+    .glass-plate:nth-child(2) { animation-delay: 0.2s; }
+    .glass-plate:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+    .glass-plate h2 { margin-bottom: 12px; font-size: clamp(18px, 3vw, 24px); }
+    .glass-plate p { font-size: clamp(14px, 2.5vw, 16px); }
+    .profile-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px 16px;
+      border-radius: 14px;
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      font-size: 15px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.3s;
+    }
+    .profile-box:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 0 12px rgba(0, 176, 255, 0.6);
+    }
+    .tv-box {
+      background: #111;
+      border: 2px solid #ffffff50;
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 0 10px rgba(255, 75, 75, 0.4);
+      margin: 0 auto;
+    }
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      border-radius: 12px;
+      padding: 12px;
+      border: none;
+      outline: none;
+      resize: vertical;
+      font-size: 15px;
+      font-family: inherit;
+      background: #222;
+      color: #fff;
+      box-sizing: border-box;
+    }
+    button {
+      background: #ff4b4b;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 12px;
+      margin-top: 15px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: 0.3s;
+      width: 100%;
+      max-width: 220px;
+    }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    button:hover:not(:disabled) { transform: scale(1.05); background: #ff2a2a; }
+    .alert {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+      text-shadow: 0 0 5px #00000066;
+    }
+    .alert.success { background: #2ecc71aa; color: #fff; }
+    .alert.error { background: #e74c3caa; color: #fff; }
+    .dev-link { color: #040404; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    .dev-link:hover { color: #ffffff; text-shadow: 0 0 8px rgba(254, 254, 254, 0.6); }
+    hr { border: none; height: 2px; background: linear-gradient(to right, transparent, #f5f5f5, transparent); margin: 18px 0; }
+    @media (max-width: 768px) {
+      .glass-plate { padding: 18px; }
+      textarea { min-height: 100px; font-size: 14px; }
+      button { font-size: 14px; padding: 10px; }
+    }
+    @media (max-width: 480px) {
+      .branding { font-size: 22px; }
+      .tv-box { padding: 8px; }
+      textarea { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-header">
+    <div class="branding">
+      <span class="blue-glow">Cute</span><span class="red-plain"> Cloud</span> 
+      <img src="assets/cloud.png" style="width:1.5em; vertical-align:middle;">
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div class="glass-plate">
+      <div class="profile-box" onclick="window.location.href='dashboard.html'">
+        <img src="assets/leftwards_arrow_with_hook.png" alt="back" style="width:1.4em;"> Back To Dashboard 
+      </div>
+      <hr>
+      <h2><img src="assets/bulb.png" style="width:1.5em; vertical-align:middle; margin-top: -01%;"> About Cute Cloud</h2>
+<p>
+  Welcome to Cute Cloud <img src="assets/cloud.png" style="width:1.5em; vertical-align:middle;"> — your safe place to store, manage and enjoy photos, videos, notes and more.  
+  We’d love to hear your thoughts and improve together with you <img src="assets/blue_heart.png" style="width:1.5em; vertical-align:middle;">
+</p>
+<hr>
+
+<h2><img src="assets/computer.png" style="width:1.5em; vertical-align:middle; margin-top: -01%;"> About the Developer</h2>
+<p style="text-align:center; font-size:1rem;">
+  Created by  
+  <a href="https://github.com/sanketpadhyal" target="_blank" style="color:#00f0ff; text-decoration:none;">
+    
+    <b>Sanket Padhyal </b><img src="assets/25231.png" alt="GitHub" style="width:1.2em; vertical-align:middle; margin-right:0.3em; margin-top: -01%;">
+  </a>  
+  — Passionate about building secure & web development, and improving user experience and mine too. <img src="assets/rocket.png" alt="rocket" style="width:1.2em; vertical-align:middle; margin-right:0.3em; margin-top: -01%;">  
+  Follow his work and projects on GitHub!
+</p>
+<hr>
+    </div>
+
+    <div class="glass-plate">
+      <h2><img src="assets/envelope_with_arrow (1).png" style="width:1.5em; vertical-align:middle; margin-top: -02%;"> Give Suggestion To Developer!</h2>
+      <div id="alertBox" class="alert"></div>
+      <p>Your email: <strong><span id="userEmail">Loading...</span></strong></p>
+      <div class="tv-box">
+        <textarea id="suggestionMsg" placeholder="Type your suggestion here..."></textarea>
+      </div>
+      <button id="sendBtn" disabled>Send Suggestion</button>
+    </div>
+  </div>
+
+ <!-- 💬 Suggestion Submission Handler | Made by Sanket Padhyal (@sanketpadhyal) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+  // 🔐 Replace with your own Firebase config before deploying
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const emailSpan = document.getElementById("userEmail");
+  const suggestionMsg = document.getElementById("suggestionMsg");
+  const sendBtn = document.getElementById("sendBtn");
+  const alertBox = document.getElementById("alertBox");
+
+  let userEmail = null;
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      userEmail = user.email;
+      emailSpan.textContent = userEmail;
+      sendBtn.disabled = false;
+    } else {
+      window.location.href = "index.html";
+    }
+  });
+
+  sendBtn.addEventListener("click", async () => {
+    const message = suggestionMsg.value.trim();
+    if (!message) {
+      showAlert("⚠️ Please enter a message.", "error");
+      return;
+    }
+
+    sendBtn.textContent = "Sending…";
+    sendBtn.disabled = true;
+
+    try {
+      // 🔧 Replace with your own backend endpoint
+      const res = await fetch("YOUR_API_ENDPOINT", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: userEmail, message })
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok) {
+        showAlert("✅ Suggestion sent successfully!", "success");
+        suggestionMsg.value = "";
+      } else if (data.error?.includes("inappropriate content")) {
+        showAlert("❌ Your message contains spam/abuse and was blocked. ⚠️ You are warned, misuse will get you banned.", "error");
+      } else if (data.error?.includes("banned")) {
+        showAlert("❌ You are banned from sending suggestions.", "error");
+        sendBtn.disabled = true;
+      } else {
+        showAlert("❌ Failed to send. Try again.", "error");
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+      showAlert("❌ Error: " + err.message, "error");
+    } finally {
+      sendBtn.textContent = "Send Suggestion";
+      if (!alertBox.textContent.includes("banned")) sendBtn.disabled = false;
+    }
+  });
+
+  function showAlert(msg, type) {
+    alertBox.textContent = msg;
+    alertBox.className = "alert " + type;
+    alertBox.style.display = "block";
+    setTimeout(() => {
+      alertBox.style.display = "none";
+    }, 5000);
+  }
+</script>
+
+</body>
+</html>
