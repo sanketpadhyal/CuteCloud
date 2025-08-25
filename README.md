@@ -55,9 +55,9 @@ It features a live **suggestion system** powered by a **Telegram bot** with admi
 
 ## 🖼️ Background Image Usage
 
-We use a **custom background image (`dashboard4.png`)** in this project:
+We use a **custom background image (`dashboard4.jpg`)** in this project:
 
-![Background Preview](assets/dashboard4.png)
+![Background Preview](assets/dashboard4.jpg)
 
 ⚡ **Performance Note:**  
 Always try to use **compressed or low-sized images** for backgrounds.  
