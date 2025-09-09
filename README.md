@@ -22,6 +22,13 @@ It features a live **suggestion system** powered by a **Telegram bot** with admi
 
 ---
 
+# 📢 ALERT: BACKEND IS NOW 24×7 ONLINE 
+
+✅ The **CuteCloud Backend** is now fully hosted on **Render**, which means the project is **available 24×7 without downtime**.  
+⚡ Your experience is smoother, faster, and always active! 
+
+---
+
 ## ✨ Features
 
 - 🔐 **User Authentication**: Powered by **Firebase Auth**
