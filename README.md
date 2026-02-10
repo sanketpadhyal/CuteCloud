@@ -111,6 +111,11 @@ This ensures **faster loading times** and a **smoother user experience**, especi
 
 ---
 
+### 📅 Project Information
+Created: July 17, 2025
+
+---
+
 ## 🏷️ Ownership  
 
 © 2025 **Sanket Padhyal**. All rights reserved.  
